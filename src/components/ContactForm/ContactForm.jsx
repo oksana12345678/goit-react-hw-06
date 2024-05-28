@@ -1,10 +1,12 @@
 import { Formik, ErrorMessage, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useId } from "react";
-import { nanoid } from "nanoid";
 import css from "./ContactForm.module.css";
+import { addContact } from "../../redux/contactsSlice";
+import { useDispatch } from "react-redux";
 
-export default function ContactForm({ onAdd }) {
+export default function ContactForm() {
+  const dispatch = useDispatch();
   const formNameId = useId();
   const formNumberId = useId();
   const contactsSchema = Yup.object().shape({
@@ -12,17 +14,15 @@ export default function ContactForm({ onAdd }) {
       .min(2, "Too Short!")
       .max(30, "Too Long!")
       .required("Required"),
-    phone: Yup.string()
+    number: Yup.string()
       .min(9, "Too Short!")
       .max(12, "Too Long!")
       .required("Required"),
   });
   const handleSubmit = (values, actions) => {
-    onAdd({
-      id: nanoid(),
-      name: values.name,
-      number: values.phone,
-    });
+    const { name } = values;
+    const { number } = values;
+    dispatch(addContact(name, number));
     actions.resetForm();
   };
   return (
@@ -30,7 +30,7 @@ export default function ContactForm({ onAdd }) {
       className={css.contactForm}
       validationSchema={contactsSchema}
       onSubmit={handleSubmit}
-      initialValues={{ name: "", phone: "" }}
+      initialValues={{ name: "", number: "" }}
     >
       <Form className={css.contactForm}>
         <div className={css.inputContainer}>
@@ -49,9 +49,9 @@ export default function ContactForm({ onAdd }) {
             className={css.nameInput}
             id={formNumberId}
             type="tel"
-            name="phone"
+            name="number"
           />
-          <ErrorMessage className={css.error} name="phone" component="span" />
+          <ErrorMessage className={css.error} name="number" component="span" />
         </div>
         <button className={css.buttonSubmit} type="submit">
           Add contact
