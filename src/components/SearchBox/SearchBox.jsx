@@ -11,7 +11,6 @@ export default function SearchBox() {
   const handleFilter = (e) => {
     const name = e.target.value.trim();
     dispatch(setStatusFilter(name));
-    console.log(name);
   };
   return (
     <div className={css.filter}>
