@@ -6,9 +6,8 @@ import { selectContacts, selectNameFilter } from "../../redux/selectors";
 const ContactList = () => {
   const contacts = useSelector(selectContacts);
   const filters = useSelector(selectNameFilter) || "";
-  const arrayOfContacts = Object.values(contacts);
-
-  const visibleContacts = arrayOfContacts.filter((contact) => {
+  console.log(contacts);
+  const visibleContacts = contacts.filter((contact) => {
     if ("id" in contact && "name" in contact && "number" in contact) {
       if (
         typeof contact.id === "string" &&
